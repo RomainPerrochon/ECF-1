@@ -1,1 +1,22 @@
-/* Le code CSS */
+/* Petits ajustements visuels */
+body {
+  min-height: 100vh;
+}
+
+#alert-container > div {
+  margin-bottom: 0.75rem;
+}
+
+/* Images de cartes (recherche) */
+.card-img-top {
+  object-fit: cover;
+  height: 300px;
+}
+
+/* Breakpoints: Bootstrap gère déjà la responsivité.
+   Ajoutons juste quelques espaces sur petits écrans. */
+@media (max-width: 576px) {
+  .navbar .btn {
+    margin-top: 0.5rem;
+  }
+}
