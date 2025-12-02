@@ -623,12 +623,12 @@ tbody tr:hover {
 tbody td {
     padding: 1.25rem 2rem;
     font-size: 1.125rem;
-    color: #fde68a;
+    color: #000000;
 }
 
 tbody td:first-child {
     font-weight: 700;
-    color: #fef3c7;
+    color: #000000;
 }
 
 /* Delete */
