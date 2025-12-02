@@ -14,19 +14,13 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   position: relative;
   z-index: auto;
-  background: url("/img/pellicule-left.png") left top/150px auto repeat-y,
-    /* Image de pellicule à gauche*/ url("/img/pellicule-right.png") right
-      top/150px auto repeat-y,
-    /* Image de pellicule à droite*/ url("/img/clap.png") 9% 20% / 200px auto
-      no-repeat,
-    /* Image de  en haut a gauche*/ url("/img/billet.png") 92% 20% / 200px auto
-      no-repeat,
-    /* Image de  en haut a droite*/ url("/img/popcorn.png") 10% 100% / 220px
-      auto no-repeat,
-    /* Image de popcorn en bas à gauche*/ url("/img/projecteur.png") 90% 100% /
-      250px auto no-repeat,
-    /* Image de projecteur en bas à droite*/
-      linear-gradient(to bottom, #000000, #850404 50%, #444343); /* Dégradé de fond */
+  background: url("/img/pellicule-left.png") left top/150px auto repeat-y,/* Image de pellicule à gauche*/ 
+  url("/img/pellicule-right.png") right top/150px auto repeat-y,/* Image de pellicule à droite*/ 
+  url("/img/clap.png") 9% 20% / 200px auto no-repeat,/* Image de  en haut a gauche*/ 
+  url("/img/billet.png") 92% 20% / 200px auto no-repeat, /* Image de  en haut a droite*/ 
+  url("/img/popcorn.png") 10% 100% / 220px auto no-repeat, /* Image de popcorn en bas à gauche*/ 
+  url("/img/projecteur.png") 90% 100% /250px auto no-repeat,/* Image de projecteur en bas à droite*/
+  linear-gradient(to bottom, #000000, #850404 50%, #444343); /* Dégradé de fond */
 }
 
 body:focus {
@@ -496,8 +490,7 @@ nav {
   font-weight: 900;
 }
 
-.filter-select,
-.filter-input {
+.filter-select, .filter-input {
   border: 3px solid #ca8a04;
   border-radius: 0.75rem;
   padding: 1rem 1.25rem;
@@ -511,8 +504,7 @@ nav {
   appearance: none;
 }
 
-.filter-input:focus,
-.filter-select:focus {
+.filter-input:focus, .filter-select:focus {
   box-shadow: 0 0 0 4px rgba(234, 179, 8, 0.3);
   border-color: #fbbf24;
 }
