@@ -8,39 +8,28 @@
 
 /* Début du body */
 body {
-    color: #000000;
+    color: #ffd902;
     overflow-x: hidden;
     min-height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
     position: relative;
     z-index: auto;
-    /*background:
-        url("/img/pellicule-left.png") left top/150px auto repeat-y, /* Image de pellicule à gauche
-        url("/img/pellicule-right.png") right top/150px auto repeat-y, /* Image de pellicule à droite
-        url("/img/projecteur.png") 90% 5% / 250px auto no-repeat, /* Image de projecteur en haut à droite
-        url("/img/popcorn.png") 10% 90% / 220px auto no-repeat, /* Image de popcorn en bas à gauche
-        linear-gradient(to bottom, #000000, #7f1d1d 50%, #000000); /* Dégradé de fond */
-        
     background:
-            /* Pellicule gauche - Debug (rouge translucide) */
-            linear-gradient(rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.3)) left top/150px auto repeat-y,
-            /* Pellicule droite - Debug (bleu translucide) */
-            linear-gradient(rgba(0, 100, 255, 0.3), rgba(0, 100, 255, 0.3)) right top/150px auto repeat-y,
-            /* Projecteur - Debug (vert translucide) */
-            linear-gradient(rgba(0, 255, 0, 0.3), rgba(0, 255, 0, 0.3)) 90% 5%/250px auto no-repeat,
-            /* Popcorn - Debug (jaune translucide) */
-            linear-gradient(rgba(255, 255, 0, 0.3), rgba(255, 255, 0, 0.3)) 10% 90%/220px auto no-repeat,
-            /* Fond normal */
-            linear-gradient(to bottom, #000000, #7f1d1d 50%, #000000);
+        url("/img/pellicule-left.png") left top/150px auto repeat-y, /* Image de pellicule à gauche*/
+        url("/img/pellicule-right.png") right top/150px auto repeat-y, /* Image de pellicule à droite*/
+        url("/img/clap.png") 9% 20% / 200px auto no-repeat, /* Image de  en haut a gauche*/
+        url("/img/billet.png") 92% 20% / 200px auto no-repeat, /* Image de  en haut a droite*/
+        url("/img/popcorn.png") 10% 100% / 220px auto no-repeat, /* Image de popcorn en bas à gauche*/
+        url("/img/projecteur.png") 90% 100% / 250px auto no-repeat, /* Image de projecteur en bas à droite*/
+
+        linear-gradient(to bottom, #000000, #850404 50%, #444343); /* Dégradé de fond */
 }
-
-
 
 body:focus {
     outline: none;
 }
 
-/* Effet scanlines */
+/* Effet scanlines (ligne horizontale style retro gaming)*/
 body::before {
     opacity: 0.3;
     pointer-events: none; 
@@ -51,8 +40,8 @@ body::before {
         0deg,
         transparent,
         transparent 2px,
-        rgba(127, 29, 29, 0.1) 2px,
-        rgba(127, 29, 29, 0.1) 4px
+        rgba(255, 0, 0, 0.397) 2px,
+        rgba(127, 29, 29, 0.5) 4px
     );
     position: fixed;
     right: 0;
