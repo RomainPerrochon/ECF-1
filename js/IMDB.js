@@ -1,21 +1,21 @@
-// recupere chaque element du HTML dont j'ai besoin pour bosser
-const altContenere = document.getElementById("alert-contenere"); // là ou on met les messages d'alerte
-const form = document.getElementById("search-form"); // le formulaire de recherche
+// recupere chaque element du html
+const altContenere = document.getElementById("alert-contenere"); // mettre les messages d'alerte
+const form = document.getElementById("search-form"); // formulaire de recherche
 const inputTitre = document.getElementById("search-titre"); // zone pour taper le titre du film
-const inputAnnee = document.getElementById("search-annee"); // année du film (optionel)
+const inputAnnee = document.getElementById("search-annee"); // année du film
 const selectionType = document.getElementById("search-type"); // type : filme / series / episode etc
 const results = document.getElementById("results"); // zone ou s'affiche les films sous forme de cartes
 const pagination = document.getElementById("pagination"); // zone avec les numeros de pages
 const bouttonReset = document.getElementById("btn-reset"); // bouton pour remettre la recherche a zero
 
-// la clé API OMDB (ne pas partager)
+// la clé API IMDB (ne pas partager)
 const CLE_API_IMDB = "4d5ded75";
 
-// petite fonction pour afficher un message d'alerte (genre erreur, warning, succes, etc)
+// pour afficher un message d'alerte (genre erreur, warning, succes)
 function AfficheAlerte(type, message, ms = 3000) {
-  const wrapper = document.createElement("div"); // crée un bloc qui va contenir l'alerte
+  const wrapper = document.createElement("div"); // bloc qui va contenir l'alerte
 
-  // composant bootstrap + message
+  // bootstrap + message
   wrapper.innerHTML = `
     <div class="alert alert-${type} alert-dismissible fade show" role="alert">
       ${message}
@@ -25,7 +25,7 @@ function AfficheAlerte(type, message, ms = 3000) {
 
   altContenere.appendChild(wrapper); // affiche l'alerte
 
-  // enleve automatiquement après X millisecondes
+  // enleve automatiquement apres X ms
   setTimeout(() => {
     const alertEl = wrapper.querySelector(".alert");
     if (alertEl) {
@@ -35,27 +35,27 @@ function AfficheAlerte(type, message, ms = 3000) {
   }, ms);
 }
 
-// fonction qui construit l'URL pour appeler l'API OMDB
+// construit l'URL pour appeler l'API IMDB
 function ContAddMail({ titre, annee, type, page }) {
-  const url = new URL("https://www.omdbapi.com/"); // URL de base OMDB
-  url.searchParams.set("apikey", CLE_API_IMDB); // la clé obligatoire
+  const url = new URL("https://www.omdbapi.com/"); // URL de base IMDB
+  url.searchParams.set("apikey", CLE_API_IMDB); // la clé obligatoire sinon bug
   url.searchParams.set("s", titre); // "s" pour search (recherche rapide par titre)
 
-  if (annee) url.searchParams.set("y", annee); // si année fournie, je l'ajoute
+  if (annee) url.searchParams.set("y", annee); // si année fournie => je l'ajoute
   if (type) url.searchParams.set("type", type); // type de contenu
   if (page) url.searchParams.set("page", page); // pagination
 
   return url.toString(); // renvoi l'URL complète
 }
 
-// fonction asyncrone qui appelle l'API et affiche les résultats
+// asynchrone qui appelle l'API et affiche les résultats
 async function ResultatFletch(params) {
-  const url = ContAddMail(params); // récupère l'URL construite
+  const url = ContAddMail(params); // récupere l'URL construit
   try {
-    const res = await fetch(url); // appel API (peut être long)
-    const data = await res.json(); // conversion en JSON
+    const res = await fetch(url); // appel API (peut être long limitation a 10000)
+    const data = await res.json(); // conversion en json
 
-    // si OMDB renvoie une erreur
+    // si IMDB renvoie une erreur
     if (data.Response === "False") {
       results.innerHTML = ""; // efface les résultats
       pagination.innerHTML = ""; // efface la pagination
@@ -73,12 +73,12 @@ async function ResultatFletch(params) {
     return { liste, totale };
   } catch (err) {
     console.error(err); // debug si souci
-    AfficheAlerte("danger", "Erreur réseau. Réessayez plus tard.", 5000);
+    AfficheAlerte("/!\n ALLERT /!\n", "Erreur réseau. Réessayez plus tard.", 5000);
     return { liste: [], totale: 0 };
   }
 }
 
-// fonction qui affiche les cartes des films
+// affiche les cartes des films
 function ResultaztRenvoyer(items) {
   results.innerHTML = ""; // efface le précédent affichage
 
@@ -88,7 +88,7 @@ function ResultaztRenvoyer(items) {
     const col = document.createElement("div"); // colonne bootstrap ??
     col.className = "col-12 col-sm-6 col-md-4 col-lg-3";
 
-    // si OMDB n'a pas d'image => mettre image 'fallback'
+    // si IMDB n'a pas d'image => mettre image 'fallback'
     const poster =
       item.Poster && item.Poster !== "N/A"
         ? item.Poster
@@ -117,16 +117,16 @@ function ResultaztRenvoyer(items) {
   });
 }
 
-// fonction qui affiche la pagination
+// affiche la pagination
 function PaginationRenvoyer(totale, params) {
   pagination.innerHTML = ""; // efface la pagination précédente
 
-  const pages = Math.ceil(totale / 10); // OMDB renvoi 10 films par page
+  const pages = Math.ceil(totale / 10); // IMDB renvoi max 10 films par page
   if (pages <= 1) return; // si 1 seule page => inutile
 
   const PageActive = Number(params.page || 1);
 
-  // fonction pour créer un bouton de page
+  // créer un bouton de page (si besoin)
   const CreationPageObjet = (
     pageNum,
     label = pageNum,
@@ -161,7 +161,7 @@ function PaginationRenvoyer(totale, params) {
     CreationPageObjet(PageActive - 1, "«", PageActive <= 1)
   );
 
-  const MaxEnvoyer = 7; // limite le nombre de pages affichées
+  const MaxEnvoyer = 7; // limite le nombre de pages affichées pour faciliter la vitésse
   let start = Math.max(1, PageActive - 3);
   let end = Math.min(pages, start + MaxEnvoyer - 1);
 
@@ -169,7 +169,7 @@ function PaginationRenvoyer(totale, params) {
     start = Math.max(1, end - MaxEnvoyer + 1);
   }
 
-  // boucle sur les pages affichées
+  // boucle sur les pages affichés
   for (let p = start; p <= end; p++) {
     pagination.appendChild(
       CreationPageObjet(p, String(p), false, p === PageActive)
@@ -182,7 +182,7 @@ function PaginationRenvoyer(totale, params) {
   );
 }
 
-// fonction principale de recherche (appelée quand on soumet le formulaire)
+// fonction principale de recherche (quand on soumet le formulaire)
 function RechercheDe({ titre, annee, type, page = 1 }) {
   const q = {
     titre: titre ? titre.trim() : "",
@@ -191,22 +191,22 @@ function RechercheDe({ titre, annee, type, page = 1 }) {
     page,
   };
 
-  // titre min 2 lettres, sinon OMDB renvoie rien
+  // titre min 2 lettres, sinon IMDB renvoie rien
   if (!q.titre || q.titre.length < 2) {
     AfficheAlerte(
       "warning",
-      "Le titre doit contenir au moins 2 caractères.",
+      "Le titre doit contenir au moins 2 caracteres.",
       4000
     );
     return;
   }
 
-  ResultatFletch(q); // lance la recherche
+  ResultatFletch(q); // lycos lance la recherche
 }
 
 // quand valide le formulaire
 form.addEventListener("submit", (e) => {
-  e.preventDefault(); // empêche le rafraîchissement de la page
+  e.preventDefault(); // empeche le rafraichissement de la page
   RechercheDe({
     titre: inputTitre.value,
     annee: inputAnnee.value,

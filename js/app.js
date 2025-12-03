@@ -29,13 +29,13 @@ var films = [
   },
 ];
 
-// récupération des éléments HTML pour pouvoir modifier la page
+// récupération des éléments du html pour modifier la page
 const TabCorps = document.getElementById("films-TabCorps"); // body du tableau
 const altContenere = document.getElementById("alert-contenere"); // endroit ou je met les messages d'alerte
 
 const ButtonForm = document.getElementById("btn-open-form"); // bouton pour ouvrir le modal
 const addFilmModalID = document.getElementById("addFilmModal"); // la div du modal
-const addFilmModal = new bootstrap.Modal(addFilmModalID); // bootstrap pour gérer l'affichage
+const addFilmModal = new bootstrap.Modal(addFilmModalID); // bootstrap gérer l'affichage
 const addFilmForm = document.getElementById("add-film-form"); // formulaire du modal
 
 const selectTri = document.getElementById("select-tri"); // select pour choisir le tri
@@ -43,16 +43,16 @@ const ButtonTri = document.getElementById("button-tri"); // bouton appliquer le 
 
 // fonction pour mettre une majuscule a chaque mot (genre Christopher Nolan)
 function MajusculeMot(str) {
-  if (!str) return str; // si rien retourn rien (évite erreur)
+  if (!str) return str; // si rien => retourn rien (évite erreur)
 
   return str
     .trim() // enlève les espaces au debut / fin
-    .split(/\s+/) // sépare en mots (si plusieurs espace, ça marche quand même)
+    .split(/\s+/) // sépare en mots (si plusieurs espace, ça marche quand même mais a reverifier avec plein d'espace entre les lettre)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // met la 1ere lettre en maj
-    .join(" "); // recombine le tout
+    .join(" "); // colle tout ensemble
 }
 
-// fonction pour afficher un petit message d'alerte (genre erreur ou succès)
+// afficher un petit message d'alerte (genre erreur / succès)
 function AfficheAlerte(type, message, ms = 3000) {
   const wrapper = document.createElement("div"); // crée un conteneur
   wrapper.innerHTML = `
@@ -63,19 +63,20 @@ function AfficheAlerte(type, message, ms = 3000) {
     `;
   altContenere.appendChild(wrapper);
 
-  // enlève l'alerte après X millisecondes
+  // enlève l'alerte après X ms
   setTimeout(() => {
     const alertEl = wrapper.querySelector(".alert");
     if (alertEl) {
       const bsAlert = new bootstrap.Alert(alertEl);
-      bsAlert.close(); // ferme proprement (effet fade)
+      bsAlert.close(); // ferme l'alerte (effet fade)
     }
   }, ms);
 }
 
-// fonction qui dessine le tableau avec les films
+
+// Crée le tableau des films
 function TableauFilm(data) {
-  TabCorps.innerHTML = ""; // vide d'abord le tableau
+  TabCorps.innerHTML = ""; // vide le tableau en premier
 
   // si aucun film => affiche un message vide
   if (!data || data.length === 0) {
@@ -85,7 +86,7 @@ function TableauFilm(data) {
     return;
   }
 
-  // sinon on crée une ligne par film
+  // sinon => crée une ligne par film
   data.forEach((film, index) => {
     const tr = document.createElement("tr");
 
@@ -104,10 +105,10 @@ function TableauFilm(data) {
   });
 }
 
-// --- TRI des films ---
+
 // utilisation lodash (orderBy)
 function TrierRendreFilm() {
-  const mode = selectTri.value; // choix du tri (titre ou année)
+  const mode = selectTri.value; // choix du tri (titre / année / style / ...)
   let sorted = films.slice(); // copie du tableau
 
   if (mode === "titre") {
@@ -118,10 +119,11 @@ function TrierRendreFilm() {
     sorted = _.orderBy(sorted, ["annee"], ["desc"]);
   }
 
-  TableauFilm(sorted); // redessine le tableau
+  TableauFilm(sorted); // recrée le tableau
 }
 
-// --- SUPPRESSION d’un film ---
+
+// partir pour suprimer les film
 TabCorps.addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-id]"); // vérifie si on a cliquer sur un bouton supprimer
 
@@ -130,7 +132,7 @@ TabCorps.addEventListener("click", (e) => {
   const id = Number(btn.getAttribute("data-id")); // récupère l'id du film
   const film = films.find((m) => m.id === id); // cherche le film dans le tableau
 
-  if (!film) return; // sécurité
+  if (!film) return; // sécurité (pour les erreur)
 
   const confirmed = window.confirm(
     `Confirmer la suppression de "${film.titre}" ?`
@@ -146,17 +148,18 @@ TabCorps.addEventListener("click", (e) => {
   }
 });
 
-// --- OUVERTURE du formulaire ---
+
+// formulaire 
 ButtonForm.addEventListener("click", () => {
   addFilmForm.reset(); // nettoie les champs
   addFilmModal.show(); // ouverture de la popup
 });
 
-// --- VALIDATION du formulaire d'ajout ---
+// Validation du formulaire
 addFilmForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  // récupération des valeurs entrées par l'utilisateur
+  // récupére les valeurs entrées
   const titreBrut = document.getElementById("input-titre").value.trim();
   const anneeBrut = document.getElementById("input-annee").value.trim();
   const auteurBrut = document.getElementById("input-author").value.trim();
@@ -176,7 +179,7 @@ addFilmForm.addEventListener("submit", (e) => {
 
   if (auteurBrut.length < 5) erreurs.push("Auteur (≥ 5 caractères)");
 
-  // si y’a des erreurs => message et on bloque
+  // si des erreurs => message et bloque
   if (erreurs.length > 0) {
     const msg = "Erreur dans le formulaire: " + erreurs.join(", ");
     AfficheAlerte("danger", msg, 5000);
@@ -187,7 +190,7 @@ addFilmForm.addEventListener("submit", (e) => {
   const titre = MajusculeMot(titreBrut);
   const auteur = MajusculeMot(auteurBrut);
 
-  // ajout dans le tableau de films
+  // ajout dans le tableau des films
   films.push({
     id: Date.now(), // nouvel ID
     titre,
@@ -195,15 +198,15 @@ addFilmForm.addEventListener("submit", (e) => {
     auteur,
   });
 
-  // on trie et on affiche
+  // on trie et affiche
   TrierRendreFilm();
 
-  addFilmModal.hide(); // on ferme la popup
+  addFilmModal.hide(); // fermeture de la popup
   AfficheAlerte("success", "Film ajouté avec succès", 3000);
 });
 
-// bouton pour appliquer manuellement le tri
+// bouton pour appliquer le tri manuellement
 ButtonTri.addEventListener("click", TrierRendreFilm);
 
-// au chargement => on affiche direct les films triés
+// au chargement => affiche direct les films triés
 TrierRendreFilm();
