@@ -1,5 +1,5 @@
 Projet : ECF Mediatheque 
-Gestion de Vidéothèque + Recherche de Films via IMDB
+Gestion de Videotheque + Recherche de Films via IMDB
 
 Ce projet est deux page web permettant :
 
